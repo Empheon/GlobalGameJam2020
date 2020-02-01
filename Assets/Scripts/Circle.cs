@@ -1,9 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Circle : MonoBehaviour
+public class Circle : MonoBehaviour, ICircle
 {
+
+    public event DestroyHandler OnDestroyFinished;
+
     public Material CircleMat;
     public Material ToConstructMat;
     public float AnimationDuration;
@@ -128,7 +131,8 @@ public class Circle : MonoBehaviour
                     _destroying = false;
                     _destructedCircles.Add(_destructionCircleInConstruction);
                 }
-            } else
+            }
+            else
             {
                 // else we create a destruction circle
                 _destroying = true;
@@ -141,5 +145,12 @@ public class Circle : MonoBehaviour
             }
 
         }
+
+        public void Destroy()
+        {
+            OnDestroyFinished?.Invoke(this);
+            // todo: destroy the circle
+        }
+
     }
 }
