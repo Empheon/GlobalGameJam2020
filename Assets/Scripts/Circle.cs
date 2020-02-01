@@ -24,7 +24,11 @@ namespace Assets.Scripts
         private List<GameObject> _destructedCircles;
 
         private GameObject _destructionCircleInConstruction;
+        private GameObject _creationCircleInConstruction;
         private bool _destroying;
+        private bool _creating;
+        private float _creationEndDegree;
+
         public int? OnReduceFinishedEventCountInvocation => OnReduceFinished?.GetInvocationList().Length;
 
         public Color Init(List<float> lineWidth, List<float> radius)
@@ -69,7 +73,27 @@ namespace Assets.Scripts
         public void Reduce()
         {
             _circleBase.GetComponent<CircleComponent>().Reduce();
+
+            if (_creating)
+            {
+                _creating = false;
+                _circlesToConstruct.Add(_creationCircleInConstruction);
+            }
+
             foreach (var circle in _circlesToConstruct)
+            {
+                var circleComponent = circle.GetComponent<CircleComponent>();
+                circleComponent.OnReduceFinished += ReduceFinished;
+                circleComponent.Reduce();
+            }
+
+            if (_destroying)
+            {
+                _destroying = false;
+                _destructedCircles.Add(_destructionCircleInConstruction);
+            }
+
+            foreach (var circle in _destructedCircles)
             {
                 var circleComponent = circle.GetComponent<CircleComponent>();
                 circleComponent.OnReduceFinished += ReduceFinished;
@@ -92,38 +116,74 @@ namespace Assets.Scripts
         public void UpdatePress(float degree, bool lastPress)
         {
             var shouldDestroy = true;
-            // redraw the to construct circles with the updated angles
-            for (var i = 0; i < _circlesToConstruct.Count; i++)
+            if (_creating)
             {
-                var circle = _circlesToConstruct[i].GetComponent<CircleComponent>();
-                var degs = circle.GetDegrees();
-                if (degree > degs[0] && degree < degs[1])
+                shouldDestroy = false;
+                var circle = _creationCircleInConstruction.GetComponent<CircleComponent>();
+                circle.UpdateDegreeIn(degree);
+                circle.RedrawCircle();
+                if (lastPress || degree > _creationEndDegree)
                 {
-                    // we tap in a to construct circle
-                    var prevDegree = degs[0];
-                    circle.UpdateDegreeIn(degree);
-                    circle.RedrawCircle();
-                    shouldDestroy = false;
-
-                    // if we were destroying just before, we need to stop
-                    if (_destroying)
+                    _creating = false;
+                    _circlesToConstruct.Add(_creationCircleInConstruction);
+                }
+                if (degree > _creationEndDegree)
+                {
+                    shouldDestroy = true;
+                }
+            } else
+            {
+                // redraw the to construct circles with the updated angles
+                for (var i = 0; i < _circlesToConstruct.Count; i++)
+                {
+                    var circle = _circlesToConstruct[i].GetComponent<CircleComponent>();
+                    var degs = circle.GetDegrees();
+                    if (degree > degs[0] && degree < degs[1])
                     {
-                        circle = _destructionCircleInConstruction.GetComponent<CircleComponent>();
-                        circle.UpdateDegreeOut(prevDegree);
-                        circle.RedrawCircle();
-                        _destroying = false;
-                        _destructedCircles.Add(_destructionCircleInConstruction);
-                    }
 
-                    break;
+                        // if the diff is so small we should'nt create 2 separate circles
+                        if (Mathf.Abs(degree - degs[0]) < 0.5)
+                        {
+                            circle.UpdateDegreeIn(degree);
+                        } else
+                        {
+                            _creating = true;
+                            _creationCircleInConstruction = new GameObject("Circle to construct");
+                            _creationCircleInConstruction.transform.parent = transform;
+                            _creationCircleInConstruction.transform.position = new Vector3(0, 0, -5);
+                            var tcCC = _creationCircleInConstruction.AddComponent<CircleComponent>();
+                            var endDeg = degs[1];
+                            tcCC.StepsIndex = _circleBase.GetComponent<CircleComponent>().StepsIndex;
+                            tcCC.Init(_lineWidth, _radius, _color, ToConstructMat, true, AnimationDuration, new float[] { degree, endDeg });
+                            _creationEndDegree = endDeg;
+                            tcCC.RedrawCircle();
+                            circle.UpdateDegreeOut(degree);
+                        }
+                        // we tap in a to construct circle
+                        var prevDegree = degs[0];
+                        circle.RedrawCircle();
+                        shouldDestroy = false;
+
+                        // if we were destroying just before, we need to stop
+                        if (_destroying)
+                        {
+                            circle = _destructionCircleInConstruction.GetComponent<CircleComponent>();
+                            circle.UpdateDegreeOut(degree);
+                            circle.RedrawCircle();
+                            _destroying = false;
+                            _destructedCircles.Add(_destructionCircleInConstruction);
+                        }
+
+                        break;
+                    }
                 }
             }
-
 
             // if it doesnt construct, it destroys on normal angles
             // we need to create a new circle
             if (shouldDestroy)
             {
+                _creating = false;
                 // we update the circle in destruction if we're already destroying it
                 if (_destroying)
                 {
@@ -135,8 +195,7 @@ namespace Assets.Scripts
                         _destroying = false;
                         _destructedCircles.Add(_destructionCircleInConstruction);
                     }
-                }
-                else
+                } else
                 {
                     // else we create a destruction circle
                     _destroying = true;
@@ -144,8 +203,8 @@ namespace Assets.Scripts
                     _destructionCircleInConstruction.transform.parent = transform;
                     _destructionCircleInConstruction.transform.position = new Vector3(0, 0, -5);
                     var tcCC = _destructionCircleInConstruction.AddComponent<CircleComponent>();
-                    tcCC.Init(_lineWidth, _radius, _color, ToConstructMat, true, AnimationDuration, new float[] { degree, degree });
                     tcCC.StepsIndex = _circleBase.GetComponent<CircleComponent>().StepsIndex;
+                    tcCC.Init(_lineWidth, _radius, _color, ToConstructMat, true, AnimationDuration, new float[] { degree, degree });
                 }
 
             }

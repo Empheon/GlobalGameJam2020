@@ -50,7 +50,7 @@ namespace Assets.Scripts
 
 
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             // Asked to reduce
             if (_reduce)
@@ -87,7 +87,7 @@ namespace Assets.Scripts
 
         private void DrawCircle(float radius, float lineWidth)
         {
-            var segments = 600;
+            var segments = 1000;
             _line.useWorldSpace = false;
             _line.startWidth = lineWidth;
             _line.endWidth = lineWidth;
