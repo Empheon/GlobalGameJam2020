@@ -78,7 +78,6 @@ namespace Assets.Scripts
                 _secondHalf = true;
             else
                 _secondHalf = false;
-            Debug.Log(currentAngle +":"+ _lastSecondHalfValue + " : " + _secondHalf);
             return _lastSecondHalfValue == true && _secondHalf == false;
         }
 
