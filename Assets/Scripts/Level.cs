@@ -40,7 +40,10 @@ namespace Assets.Scripts
             _next.CreateCircles();
             _next.OnReduce += Reduce;
             if (init == true)
+            {
+                LifeTime--;
                 return;
+            }
             Reduce();
         }
 
