@@ -18,6 +18,8 @@ namespace Assets.Scripts
         public Level LevelGameObject;
         public Circle CircleGameObject;
 
+        public Level Next => _next;
+
         private Level _next;
         private List<Circle> _circles = new List<Circle>();
 
@@ -27,17 +29,19 @@ namespace Assets.Scripts
         public void Init()
         {
             name = "Level-" + levelNumber;
-            //CreateInitCircles();
-            InstantiateNext();
+            CreateInitCircles();
+            InstantiateNext(true);
         }
 
-        public void InstantiateNext()
+        public void InstantiateNext(bool init = false)
         {
             _next = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
             levelNumber++;
             _next.name = "Level-" + levelNumber;
             _next.CreateCircles();
             _next.OnReduce += Reduce;
+            if (init == true)
+                return;
             Reduce();
         }
 
@@ -73,14 +77,14 @@ namespace Assets.Scripts
         private void Reduce()
         {
             LifeTime--;
-            OnReduce?.Invoke();
             foreach (var circle in _circles)
             {
                 circle.OnReduceFinished += ReduceFinished;
                 circle.Reduce();
             }
+            OnReduce?.Invoke();
             if (_circles.Count == 0)
-                OnNextLevelReady?.Invoke(_next);
+                OnNextLevelReady?.Invoke();
         }
 
         private void ReduceFinished(Circle circle)
@@ -92,7 +96,7 @@ namespace Assets.Scripts
                     return;
             }
             DestroyLevel();
-            OnNextLevelReady?.Invoke(_next);
+            OnNextLevelReady?.Invoke();
         }
 
         private void DestroyLevel()
