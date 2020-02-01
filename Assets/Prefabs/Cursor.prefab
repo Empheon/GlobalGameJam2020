@@ -49,4 +49,4 @@ MonoBehaviour:
   PositionOffset: 0
   CursorState: 1
   Direction: {x: 0, y: 0, z: -1}
-  RotationSpeed: 100
+  RotationSpeed: 150

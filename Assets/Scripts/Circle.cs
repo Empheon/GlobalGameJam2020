@@ -29,24 +29,16 @@ namespace Assets.Scripts
 
         public void Init(List<float> lineWidth, List<float> radius, Color color, List<float[]> toConstructDegrees)
         {
-            _lineWidth = lineWidth;
-            _radius = radius;
+            Init(lineWidth, radius);
             _color = color;
             _toConstructDegrees = toConstructDegrees;
         }
-
-        void Awake()
+        public void Init(List<float> lineWidth, List<float> radius)
         {
-            _lineWidth = new List<float>();
-            _radius = new List<float>();
-            _lineWidth.Add(0.75f);
-            _lineWidth.Add(0.5f);
-            _lineWidth.Add(0.25f);
-            _radius.Add(3f);
-            _radius.Add(1.5f);
-            _radius.Add(0.75f);
-            _color = Color.yellow;
+            _lineWidth = lineWidth;
+            _radius = radius;
 
+            _color = Color.yellow;
             _toConstructDegrees = new List<float[]>();
             _toConstructDegrees.Add(new float[] { 20, 50 });
             _toConstructDegrees.Add(new float[] { 120, 200 });
