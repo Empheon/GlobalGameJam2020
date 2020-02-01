@@ -19,22 +19,19 @@ namespace Assets.Scripts
         /// </summary>
         public float PositionOffset;
         /// <summary>
-        /// degrees per second to rotate in each axis
-        /// </summary>
-        public Vector3 RotateAmount;
-        /// <summary>
         /// Current state of the cursor, turning or not (active/inactive)
         /// </summary>
         public CursorState CursorState;
         /// <summary>
         /// Rotation speed of the cursor
         /// </summary>
-        public float RotationSpeed;
+        public float RotationSpeed = 30f;
 
         /// <summary>
         /// Angle of the cursor in degree
         /// </summary>
-        public float CurrenAngleInDegree => transform.rotation.eulerAngles.z;
+        //public float CurrenAngleInDegree => transform.rotation.eulerAngles.z
+        public float CurrenAngleInDegree => transform.localRotation.eulerAngles.z;
 
         private void Start()
         {
@@ -45,7 +42,8 @@ namespace Assets.Scripts
         {
             if (CursorState == CursorState.ACTIVE)
             {
-                transform.Rotate(new Vector3(0, 0, RotationSpeed) * Time.deltaTime);
+                //transform.Rotate(new Vector3(0, 0, RotationSpeed) * Time.deltaTime);
+                transform.Rotate(Vector3.forward * RotationSpeed * Time.deltaTime);
                 if (TurnDone(CurrenAngleInDegree, OneTurnDegree))
                     NewTurn();
             }

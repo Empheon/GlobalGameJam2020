@@ -43,3 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96bffb820ed1edb4197aa408e5cc928d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CursorGameObject: {fileID: 7697434909140967768, guid: d48b0d23234612948aaab172269c3312,
+    type: 3}
+  LevelGameObject: {fileID: 4613485126764751786, guid: 2bfc7bacd7a36754f9c1962f6a148050,
+    type: 3}

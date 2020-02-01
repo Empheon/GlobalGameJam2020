@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e46eef83da6fe4595e297ccdc80edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Angle: 0
   Length: 3
   PositionOffset: 0
+  CursorState: 1
+  RotationSpeed: 30

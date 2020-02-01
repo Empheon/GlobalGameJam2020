@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Enums;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -8,9 +9,11 @@ namespace Assets.Scripts
         [Header("Manager")]
         public static GameManager Instance;
 
-        public Cursor Cursor;
+        public Cursor CursorGameObject;
+        public Level LevelGameObject;
 
         private Level _currentLevel;
+        private Cursor _cursor;
 
         private void Awake()
         {
@@ -25,12 +28,20 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            Cursor.OnNewTurn += NextLevel;
+            _cursor = Instantiate(CursorGameObject.gameObject).GetComponent<Cursor>();
+            _cursor.OnNewTurn += NextLevel;
+            _currentLevel = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
         }
 
         private void NextLevel()
         {
             _currentLevel = _currentLevel.NextLevel();
+            _currentLevel.OnNextLevelDone += NextLevelDone;
+        }
+
+        private void NextLevelDone()
+        {
+            _cursor.CursorState = CursorState.ACTIVE;
         }
 
     }

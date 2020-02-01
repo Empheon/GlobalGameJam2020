@@ -8,9 +8,12 @@ namespace Assets.Scripts
     {
 
         public event ReduceHandler OnReduce;
+        public event NextLevelDoneHandler OnNextLevelDone;
 
         public int LifeTime = 3;
         public float Radius;
+
+        public Level LevelGameObject;
 
         private Level _next;
         private List<Circle> _circles;
@@ -27,9 +30,8 @@ namespace Assets.Scripts
 
         private void InstantiateNext()
         {
-            _next = new Level();
+            _next = Instantiate(LevelGameObject.gameObject).GetComponent<Level>(); ;
             _next.OnReduce += Reduce;
-            // todo: instantiate the circles
             Reduce();
         }
 
@@ -45,6 +47,7 @@ namespace Assets.Scripts
             {
                 circle.Reduce();
             }
+            OnNextLevelDone?.Invoke();
         }
 
         private void Destroy()
