@@ -43,6 +43,7 @@ namespace Assets.Scripts
             _cursor.OnNewTurn += NextLevel;
 
             _scoreManager = new ScoreManager(Gauge, ScoreText);
+            _scoreManager.OnGameOver += GameOver;
 
             for (var i = 0; i < Colors.Length; i++)
             {
@@ -50,6 +51,10 @@ namespace Assets.Scripts
                 var color = Colors[i];
                 //Buttons[i] .onClick.AddListener(delegate { Touch(color, false); });
             }
+        }
+
+        private void GameOver()
+        {
         }
 
         private void NextLevel()

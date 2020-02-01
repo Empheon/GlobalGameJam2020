@@ -7,8 +7,6 @@ namespace Assets.Scripts
     public class Cursor : MonoBehaviour, ICursor
     {
 
-        private const float OneTurnDegree = 360f;
-
         public event NewTurnHandler OnNewTurn;
         /// <summary>
         /// Length of the cursor, Length = radius, and PositionOffset = 0 to have a radius line
