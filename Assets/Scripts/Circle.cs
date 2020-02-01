@@ -91,7 +91,6 @@ namespace Assets.Scripts
 
         public void UpdatePress(float degree, bool lastPress)
         {
-            Debug.Log(degree);
             var shouldDestroy = true;
             // redraw the to construct circles with the updated angles
             for (var i = 0; i < _circlesToConstruct.Count; i++)

@@ -62,7 +62,6 @@ namespace Assets.Scripts
 
         public void Press(Color color, float angle, bool lastPress)
         {
-            //Debug.Log(gameObject.name +" "+ color + " " + _circles.Keys);
             if (_circles.ContainsKey(color))
             {
                 _circles[color].UpdatePress(360-angle, lastPress);
@@ -78,7 +77,6 @@ namespace Assets.Scripts
             lineWidth.Add(0.25f);
             radius.Add(1.5f);
             radius.Add(0.75f);
-            circle.Init(lineWidth, radius);
             _circles.Add(circle.Init(lineWidth, radius), circle);
         }
 
