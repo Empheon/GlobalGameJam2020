@@ -15,6 +15,10 @@ namespace Assets.Scripts
         /// </summary>
         public float Length;
         /// <summary>
+        /// Distance from the center of the circle
+        /// </summary>
+        public float PositionOffset;
+        /// <summary>
         /// Thickness of the line
         /// </summary>
         public float Thickness = 1f;
@@ -22,10 +26,7 @@ namespace Assets.Scripts
         /// Color of the line
         /// </summary>
         public Color Color;
-        /// <summary>
-        /// Distance from the center of the circle
-        /// </summary>
-        public float PositionOffset;
+        public Material Material;
         /// <summary>
         /// Current state of the cursor, turning or not (active/inactive)
         /// </summary>
@@ -47,8 +48,9 @@ namespace Assets.Scripts
         public float CurrenAngleInDegree => transform.rotation.eulerAngles.z;
 
         private void Start()
-        {   
+        {
             DrawLine();
+            transform.localPosition = new Vector3(0, 0, -8);
         }
 
         private void DrawLine()
@@ -58,6 +60,7 @@ namespace Assets.Scripts
             line = go.AddComponent<LineRenderer>();
             line.startWidth = Thickness;
             line.endWidth = Thickness;
+            line.material = Material;
             line.startColor = Color;
             line.endColor = Color;
             line.SetPosition(0, new Vector3(0, PositionOffset, 0));
