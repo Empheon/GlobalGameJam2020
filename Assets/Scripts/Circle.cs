@@ -5,97 +5,74 @@ using UnityEngine;
 public class Circle : MonoBehaviour
 {
     public Material CircleMat;
+    public Material ToConstructMat;
     public float AnimationDuration;
 
-    private Queue<float> _lineWidth;
-    private Queue<float> _radius;
+    private List<float[]> _toConstructDegrees;
+
+    private List<float> _lineWidth;
+    private List<float> _radius;
     private Color _color;
 
-    private LineRenderer _line;
-    private bool _reduce = false;
-    private float _reduceCounter = 0;
-    private float _currentRadius;
-    private float _currentWidth;
+    private GameObject _circleBase;
+    private List<GameObject> _circleToConstruct;
 
-    private static float _small = 0.000001f;
-
-    public Circle(Queue<float> lineWidth, Queue<float> radius, Color color)
+    public Circle(List<float> lineWidth, List<float> radius, Color color, List<float[]> toConstructDegrees)
     {
         _lineWidth = lineWidth;
         _radius = radius;
         _color = color;
+        _toConstructDegrees = toConstructDegrees;
     }
 
     void Awake()
     {
-        _lineWidth = new Queue<float>();
-        _radius = new Queue<float>();
-        _lineWidth.Enqueue(0.5f);
-        _lineWidth.Enqueue(0.5f);
-        _lineWidth.Enqueue(0.25f);
-        _radius.Enqueue(3f);
-        _radius.Enqueue(1.5f);
-        _radius.Enqueue(0.75f);
+        _lineWidth = new List<float>();
+        _radius = new List<float>();
+        _lineWidth.Add(0.5f);
+        _lineWidth.Add(0.5f);
+        _lineWidth.Add(0.25f);
+        _radius.Add(3f);
+        _radius.Add(1.5f);
+        _radius.Add(0.75f);
         _color = Color.yellow;
 
-        _line = gameObject.AddComponent<LineRenderer>();
-        DrawCircle(_radius.Peek(), _lineWidth.Peek());
+        _toConstructDegrees = new List<float[]>();
+        _toConstructDegrees.Add(new float[] { 20, 50 });
+        _toConstructDegrees.Add(new float[] { 120, 200 });
+        //////////////// above is temporary stuff
+
+        _circleToConstruct = new List<GameObject>();
+        _circleBase = new GameObject("Circle base");
+        _circleBase.transform.parent = transform;
+
+
+        var baseCC = _circleBase.AddComponent<CircleComponent>();
+        baseCC.Init(_lineWidth, _radius, _color, CircleMat, false, AnimationDuration, null);
+
+        foreach (var section in _toConstructDegrees)
+        {
+            var ctc = new GameObject("Circle to construct");
+            ctc.transform.parent = transform;
+            ctc.transform.position = new Vector3(0, 0, -5);
+            var tcCC = ctc.AddComponent<CircleComponent>();
+            tcCC.Init(_lineWidth, _radius, _color, ToConstructMat, true, AnimationDuration, section);
+
+            _circleToConstruct.Add(ctc);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Asked to reduce
-        if (_reduce)
-        {
-            _reduceCounter += Time.deltaTime / AnimationDuration;
-            // if done reducing
-            if (_reduceCounter >= 1)
-            {
-                _reduce = false;
-                _reduceCounter = 0;
-                if (_lineWidth.Count == 0 && _radius.Count == 0)
-                {
-                    // trigger destroy level
-                }
-            } else
-            {
-                // reducing
-                var newWidth = Mathf.Lerp(_currentWidth, _lineWidth.Count > 0 ? _lineWidth.Peek() : _small, _reduceCounter);
-                var newRadius = Mathf.Lerp(_currentRadius, _radius.Count > 0 ? _radius.Peek() : _small, _reduceCounter);
-                DrawCircle(newRadius, newWidth);
-            }
-        }
     }
 
     public void Reduce()
     {
-        _reduce = true;
-        _currentRadius = _radius.Peek();
-        _currentWidth = _lineWidth.Peek();
-        _radius.Dequeue();
-        _lineWidth.Dequeue();
-    }
-
-    private void DrawCircle(float radius, float lineWidth)
-    {
-        var segments = 500;
-        _line.useWorldSpace = false;
-        _line.startWidth = lineWidth;
-        _line.endWidth = lineWidth;
-        _line.positionCount = segments + 1;
-        _line.material = CircleMat;
-        _line.material.color = _color;
-
-        var pointCount = segments + 1; // add extra point to make startpoint and endpoint the same to close the circle
-        var points = new Vector3[pointCount];
-
-        for (int i = 0; i < pointCount; i++)
+        _circleBase.GetComponent<CircleComponent>().Reduce();
+        foreach (var circle in _circleToConstruct)
         {
-            var rad = Mathf.Deg2Rad * (i * 360f / segments);
-            points[i] = new Vector3(Mathf.Sin(rad) * radius, Mathf.Cos(rad) * radius, 0);
+            circle.GetComponent<CircleComponent>().Reduce();
         }
-
-        _line.SetPositions(points);
     }
 }
