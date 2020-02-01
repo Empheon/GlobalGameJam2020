@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Length: 3
+  Thickness: 0.2
+  Color: {r: 0, g: 0, b: 0, a: 0}
   PositionOffset: 0
   CursorState: 1
+  Direction: {x: 0, y: 0, z: -1}
   RotationSpeed: 30
