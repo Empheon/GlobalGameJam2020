@@ -47,8 +47,12 @@ namespace Assets.Scripts
         public float CurrenAngleInDegree => transform.rotation.eulerAngles.z;
 
         private void Start()
+        {   
+            DrawLine();
+        }
+
+        private void DrawLine()
         {
-            // todo: instantiate new line
             var go = new GameObject();
             go.transform.parent = transform;
             line = go.AddComponent<LineRenderer>();

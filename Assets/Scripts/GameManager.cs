@@ -50,14 +50,14 @@ namespace Assets.Scripts
 
         private void NextLevel()
         {
+            _currentLevel.OnNextLevelReady -= NextLevelReady;
+            _currentLevel = _currentLevel.Next;
+            _currentLevel.OnNextLevelReady += NextLevelReady;
             _currentLevel.InstantiateNext();
         }
 
-        private void NextLevelReady(Level nextLevel)
+        private void NextLevelReady()
         {
-            _currentLevel.OnNextLevelReady -= NextLevelReady;
-            _currentLevel = nextLevel;
-            _currentLevel.OnNextLevelReady += NextLevelReady;
             _cursor.CursorState = CursorState.ACTIVE;
         }
 
