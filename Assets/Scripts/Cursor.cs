@@ -70,12 +70,12 @@ namespace Assets.Scripts
             if (CursorState == CursorState.ACTIVE)
             {
                 transform.Rotate(Direction * RotationSpeed * Time.deltaTime);
-                if (TurnDone(CurrenAngleInDegree, OneTurnDegree))
+                if (TurnDone(CurrenAngleInDegree))
                     NewTurn();
             }
         }
 
-        private bool TurnDone(float currentAngle, float oneTurnDegree)
+        private bool TurnDone(float currentAngle)
         {
             var _lastSecondHalfValue = _secondHalf;
             if (currentAngle <= 180)
@@ -87,8 +87,8 @@ namespace Assets.Scripts
 
         private void NewTurn()
         {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
             CursorState = CursorState.INACTIVE;
-            transform.Rotate(new Vector3(0, 0, 0));
             OnNewTurn?.Invoke();
         }
 
