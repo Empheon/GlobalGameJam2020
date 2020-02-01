@@ -1,10 +1,15 @@
-﻿using Assets.Scripts.Enums;
+﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Enums;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
     public class GameManager : MonoBehaviour
     {
+        public static Color[] Colors = new Color[] { new Color(1, 0.65f, 0), Color.cyan };
+        public List<Button> Buttons;
 
         [Header("Manager")]
         public static GameManager Instance;
@@ -33,6 +38,14 @@ namespace Assets.Scripts
             _currentLevel.OnNextLevelReady += NextLevelReady;
             _currentLevel.Init();
             _cursor.OnNewTurn += NextLevel;
+
+            for (var i = 0; i < Colors.Length; i++)
+            {
+                Debug.Log(i);
+                Buttons[i].gameObject.GetComponent<Image>().color = Colors[i];
+                var color = Colors[i];
+                //Buttons[i] .onClick.AddListener(delegate { Touch(color, false); });
+            }
         }
 
         private void NextLevel()
@@ -46,6 +59,11 @@ namespace Assets.Scripts
             _currentLevel = nextLevel;
             _currentLevel.OnNextLevelReady += NextLevelReady;
             _cursor.CursorState = CursorState.ACTIVE;
+        }
+
+        public void Touch(Color color, bool lastPress)
+        {
+            _currentLevel.Press(color, _cursor.CurrenAngleInDegree, lastPress);
         }
 
     }

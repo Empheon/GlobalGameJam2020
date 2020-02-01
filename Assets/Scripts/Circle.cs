@@ -26,25 +26,11 @@ namespace Assets.Scripts
         private GameObject _destructionCircleInConstruction;
         private bool _destroying;
 
-        public Circle(List<float> lineWidth, List<float> radius, Color color, List<float[]> toConstructDegrees)
+        public Color Init(List<float> lineWidth, List<float> radius)
         {
             _lineWidth = lineWidth;
             _radius = radius;
-            _color = color;
-            _toConstructDegrees = toConstructDegrees;
-        }
-
-        void Awake()
-        {
-            _lineWidth = new List<float>();
-            _radius = new List<float>();
-            _lineWidth.Add(0.75f);
-            _lineWidth.Add(0.5f);
-            _lineWidth.Add(0.25f);
-            _radius.Add(3f);
-            _radius.Add(1.5f);
-            _radius.Add(0.75f);
-            _color = Color.yellow;
+            _color = GameManager.Colors[Random.Range(0, GameManager.Colors.Length)];
 
             _toConstructDegrees = new List<float[]>();
             _toConstructDegrees.Add(new float[] { 20, 50 });
@@ -70,6 +56,8 @@ namespace Assets.Scripts
 
                 _circlesToConstruct.Add(ctc);
             }
+
+            return _color;
         }
 
         // Update is called once per frame
@@ -86,10 +74,10 @@ namespace Assets.Scripts
             }
         }
 
-        public void UpdatePress(float degree)
+        public void UpdatePress(float degree, bool lastPress)
         {
+            Debug.Log(degree);
             var shouldDestroy = true;
-            bool lastPress = false;
             // redraw the to construct circles with the updated angles
             for (var i = 0; i < _circlesToConstruct.Count; i++)
             {
