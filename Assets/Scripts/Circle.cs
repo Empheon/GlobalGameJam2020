@@ -15,7 +15,7 @@ public class Circle : MonoBehaviour
     private Color _color;
 
     private GameObject _circleBase;
-    private List<GameObject> _circleToConstruct;
+    private List<GameObject> _circlesToConstruct;
 
     public Circle(List<float> lineWidth, List<float> radius, Color color, List<float[]> toConstructDegrees)
     {
@@ -29,7 +29,7 @@ public class Circle : MonoBehaviour
     {
         _lineWidth = new List<float>();
         _radius = new List<float>();
-        _lineWidth.Add(0.5f);
+        _lineWidth.Add(0.75f);
         _lineWidth.Add(0.5f);
         _lineWidth.Add(0.25f);
         _radius.Add(3f);
@@ -42,7 +42,7 @@ public class Circle : MonoBehaviour
         _toConstructDegrees.Add(new float[] { 120, 200 });
         //////////////// above is temporary stuff
 
-        _circleToConstruct = new List<GameObject>();
+        _circlesToConstruct = new List<GameObject>();
         _circleBase = new GameObject("Circle base");
         _circleBase.transform.parent = transform;
 
@@ -58,7 +58,7 @@ public class Circle : MonoBehaviour
             var tcCC = ctc.AddComponent<CircleComponent>();
             tcCC.Init(_lineWidth, _radius, _color, ToConstructMat, true, AnimationDuration, section);
 
-            _circleToConstruct.Add(ctc);
+            _circlesToConstruct.Add(ctc);
         }
     }
 
@@ -70,9 +70,29 @@ public class Circle : MonoBehaviour
     public void Reduce()
     {
         _circleBase.GetComponent<CircleComponent>().Reduce();
-        foreach (var circle in _circleToConstruct)
+        foreach (var circle in _circlesToConstruct)
         {
             circle.GetComponent<CircleComponent>().Reduce();
+        }
+    }
+
+    public void UpdatePress(float degree)
+    {
+        // destroy (add black circle gameobjects) on normal angles
+
+
+        // redraw the to construct circles with the updated angles
+        for (var i = 0; i < _circlesToConstruct.Count; i++)
+        {
+            var circle = _circlesToConstruct[i].GetComponent<CircleComponent>();
+            var degs = circle.GetDegrees();
+            if (degree > degs[0] && degree < degs[1])
+            {
+                // we tap in a to construct circle
+                circle.UpdateDegreeIn(degree);
+                circle.RedrawCircle();
+                break;
+            }
         }
     }
 }

@@ -34,7 +34,11 @@ public class CircleComponent : MonoBehaviour
         _toConstructDegrees = toConstructDegrees;
         _line = gameObject.AddComponent<LineRenderer>();
         _stepsNumber = lineWidth.Count;
-        DrawCircle(_radius[0], _lineWidth[0]);
+
+        _currentRadius = _radius[0];
+        _currentWidth = _lineWidth[0];
+
+        DrawCircle(_currentRadius, _currentWidth);
     }
 
 
@@ -74,7 +78,7 @@ public class CircleComponent : MonoBehaviour
 
     private void DrawCircle(float radius, float lineWidth)
     {
-        var segments = 500;
+        var segments = 600;
         _line.useWorldSpace = false;
         _line.startWidth = lineWidth;
         _line.endWidth = lineWidth;
@@ -108,5 +112,25 @@ public class CircleComponent : MonoBehaviour
         var arr = points.ToArray();
         _line.positionCount = arr.Length;
         _line.SetPositions(arr);
+    }
+
+    public float[] GetDegrees()
+    {
+        return _toConstructDegrees;
+    }
+
+    public void UpdateDegreeIn(float a)
+    {
+        _toConstructDegrees[0] = a;
+    }
+
+    public void UpdateDegreeOut(float a)
+    {
+        _toConstructDegrees[1] = a;
+    }
+
+    public void RedrawCircle()
+    {
+        DrawCircle(_radius[_stepsIndex], _lineWidth[_stepsIndex]);
     }
 }
