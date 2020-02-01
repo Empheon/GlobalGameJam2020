@@ -295,6 +295,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &485926105 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 714577032, guid: c46d846dd9f10d340811bf94cb39f36e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5241485108532685843}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1387870354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -378,6 +384,21 @@ PrefabInstance:
       propertyPath: Buttons.Array.data[1]
       value: 
       objectReference: {fileID: 481073752}
+    - target: {fileID: 2185306927145474062, guid: 9f998968e3e4f1a48bdc178897b00013,
+        type: 3}
+      propertyPath: ScoreText
+      value: 
+      objectReference: {fileID: 2115566031}
+    - target: {fileID: 2185306927145474062, guid: 9f998968e3e4f1a48bdc178897b00013,
+        type: 3}
+      propertyPath: Gauge
+      value: 
+      objectReference: {fileID: 1632377627}
+    - target: {fileID: 2185306927145474062, guid: 9f998968e3e4f1a48bdc178897b00013,
+        type: 3}
+      propertyPath: GameOverObject
+      value: 
+      objectReference: {fileID: 485926105}
     - target: {fileID: 2533136646543669964, guid: 9f998968e3e4f1a48bdc178897b00013,
         type: 3}
       propertyPath: m_Name
@@ -395,6 +416,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1632377627 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2012723470, guid: c46d846dd9f10d340811bf94cb39f36e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5241485108532685843}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1732548998
@@ -463,6 +496,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2115566031 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 108050479, guid: c46d846dd9f10d340811bf94cb39f36e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5241485108532685843}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &637043907751159979
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -539,6 +584,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 371619320, guid: c46d846dd9f10d340811bf94cb39f36e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 371619320, guid: c46d846dd9f10d340811bf94cb39f36e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5241485109286188436, guid: c46d846dd9f10d340811bf94cb39f36e,
         type: 3}
       propertyPath: m_Name

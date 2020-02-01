@@ -91,7 +91,7 @@ namespace Assets.Scripts
 
         private void DrawCircle(float radius, float lineWidth)
         {
-            var segments = 1000;
+            var segments = 2000;
             _line.useWorldSpace = false;
             _line.startWidth = lineWidth;
             _line.endWidth = lineWidth;

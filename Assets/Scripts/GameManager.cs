@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Enums;
 using UnityEngine;
@@ -10,6 +11,9 @@ namespace Assets.Scripts
     {
         public static Color[] Colors = new Color[] { new Color(1, 0.65f, 0), Color.cyan };
         public List<Button> Buttons;
+        public Slider Gauge;
+        public Text ScoreText;
+        public GameObject GameOverObject;
 
         [Header("Manager")]
         public static GameManager Instance;
@@ -19,6 +23,7 @@ namespace Assets.Scripts
 
         private Level _currentLevel;
         private Cursor _cursor;
+        private ScoreManager _scoreManager;
 
         private void Awake()
         {
@@ -39,6 +44,9 @@ namespace Assets.Scripts
             _currentLevel.Init();
             _cursor.OnNewTurn += NextLevel;
 
+            _scoreManager = new ScoreManager(Gauge, ScoreText);
+            _scoreManager.OnGameOver += GameOver;
+
             for (var i = 0; i < Colors.Length; i++)
             {
                 Buttons[i].gameObject.GetComponent<Image>().color = Colors[i];
@@ -46,8 +54,16 @@ namespace Assets.Scripts
             }
         }
 
+        private void GameOver()
+        {
+            Time.timeScale = .0f;
+            GameOverObject.SetActive(true);
+            GameOverObject.transform.SetAsLastSibling();
+        }
+
         private void NextLevel()
         {
+            _scoreManager.AddPoint();
             _currentLevel.OnNextLevelReady -= NextLevelReady;
             _currentLevel = _currentLevel.Next;
             _currentLevel.OnNextLevelReady += NextLevelReady;
