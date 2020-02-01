@@ -11,6 +11,7 @@ namespace Assets.Scripts.Interfaces
         event ReduceHandler OnReduce;
         event NextLevelDoneHandler OnNextLevelDone;
         Level NextLevel();
+        void Init();
 
     }
 }

@@ -16,7 +16,12 @@ namespace Assets.Scripts
         public Level LevelGameObject;
 
         private Level _next;
-        private List<Circle> _circles;
+        private List<Circle> _circles = new List<Circle>();
+
+        public void Init()
+        {
+            InstantiateNext();
+        }
 
         /// <summary>
         /// Go to next level

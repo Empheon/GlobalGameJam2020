@@ -31,6 +31,7 @@ namespace Assets.Scripts
             _cursor = Instantiate(CursorGameObject.gameObject).GetComponent<Cursor>();
             _cursor.OnNewTurn += NextLevel;
             _currentLevel = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
+            _currentLevel.Init();
         }
 
         private void NextLevel()
