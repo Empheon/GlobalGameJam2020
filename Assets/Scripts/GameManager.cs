@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Enums;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Assets.Scripts
         public List<Button> Buttons;
         public Slider Gauge;
         public Text ScoreText;
+        public GameObject GameOverObject;
 
         [Header("Manager")]
         public static GameManager Instance;
@@ -55,6 +57,9 @@ namespace Assets.Scripts
 
         private void GameOver()
         {
+            Time.timeScale = .0f;
+            GameOverObject.SetActive(true);
+            GameOverObject.transform.SetAsLastSibling();
         }
 
         private void NextLevel()
