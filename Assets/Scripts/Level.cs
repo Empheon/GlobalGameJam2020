@@ -7,6 +7,8 @@ namespace Assets.Scripts
     public class Level : MonoBehaviour, ILevel
     {
 
+        public static int levelNumber = 0;
+
         public event ReduceHandler OnReduce;
         public event NextLevelReadyHandler OnNextLevelReady;
 
@@ -17,34 +19,24 @@ namespace Assets.Scripts
 
         private Level _next;
         private List<Circle> _circles = new List<Circle>();
-        private bool _firstLevel = false;
 
         public void Init()
         {
-            _firstLevel = true;
+            name = "Level-" + levelNumber;
             InstantiateNext();
         }
 
-        /// <summary>
-        /// Go to next level
-        /// </summary>
-        /// <returns>return the next Level</returns>
-        public Level NextLevel()
-        {
-            _next.InstantiateNext();
-            return _next;
-        }
-
-        private void InstantiateNext()
+        public void InstantiateNext()
         {
             _next = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
+            levelNumber++;
+            _next.name = "Level-" + levelNumber;
             _next.OnReduce += Reduce;
             Reduce();
         }
 
         private void Reduce()
         {
-            OnReduce?.Invoke();
             LifeTime--;
             if (LifeTime == 0)
             {
@@ -56,7 +48,8 @@ namespace Assets.Scripts
             {
                 circle.Reduce();
             }
-            OnNextLevelReady?.Invoke(this);
+            OnNextLevelReady?.Invoke(_next);
+            OnReduce?.Invoke();
         }
 
         private void DestroyCircles()

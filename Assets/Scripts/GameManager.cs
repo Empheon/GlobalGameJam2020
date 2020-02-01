@@ -37,7 +37,7 @@ namespace Assets.Scripts
 
         private void NextLevel()
         {
-            _currentLevel.NextLevel();
+            _currentLevel.InstantiateNext();
         }
 
         private void NextLevelReady(Level nextLevel)

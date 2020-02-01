@@ -10,7 +10,7 @@ namespace Assets.Scripts.Interfaces
 
         event ReduceHandler OnReduce;
         event NextLevelReadyHandler OnNextLevelReady;
-        Level NextLevel();
+        void InstantiateNext();
         void Init();
 
     }
