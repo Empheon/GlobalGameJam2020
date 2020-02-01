@@ -29,19 +29,22 @@ namespace Assets.Scripts
         private void Start()
         {
             _cursor = Instantiate(CursorGameObject.gameObject).GetComponent<Cursor>();
-            _cursor.OnNewTurn += NextLevel;
             _currentLevel = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
+            _currentLevel.OnNextLevelReady += NextLevelReady;
             _currentLevel.Init();
+            _cursor.OnNewTurn += NextLevel;
         }
 
         private void NextLevel()
         {
-            _currentLevel = _currentLevel.NextLevel();
-            _currentLevel.OnNextLevelDone += NextLevelDone;
+            _currentLevel.NextLevel();
         }
 
-        private void NextLevelDone()
+        private void NextLevelReady(Level nextLevel)
         {
+            _currentLevel.OnNextLevelReady -= NextLevelReady;
+            _currentLevel = nextLevel;
+            _currentLevel.OnNextLevelReady += NextLevelReady;
             _cursor.CursorState = CursorState.ACTIVE;
         }
 

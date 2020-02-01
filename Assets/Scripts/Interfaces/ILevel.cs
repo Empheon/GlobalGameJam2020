@@ -3,13 +3,13 @@ namespace Assets.Scripts.Interfaces
 {
 
     public delegate void ReduceHandler();
-    public delegate void NextLevelDoneHandler();
+    public delegate void NextLevelReadyHandler(Level nextLevel);
 
     public interface ILevel
     {
 
         event ReduceHandler OnReduce;
-        event NextLevelDoneHandler OnNextLevelDone;
+        event NextLevelReadyHandler OnNextLevelReady;
         Level NextLevel();
         void Init();
 

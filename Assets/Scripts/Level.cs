@@ -8,7 +8,7 @@ namespace Assets.Scripts
     {
 
         public event ReduceHandler OnReduce;
-        public event NextLevelDoneHandler OnNextLevelDone;
+        public event NextLevelReadyHandler OnNextLevelReady;
 
         public int LifeTime = 3;
         public float Radius;
@@ -17,9 +17,11 @@ namespace Assets.Scripts
 
         private Level _next;
         private List<Circle> _circles = new List<Circle>();
+        private bool _firstLevel = false;
 
         public void Init()
         {
+            _firstLevel = true;
             InstantiateNext();
         }
 
@@ -35,27 +37,29 @@ namespace Assets.Scripts
 
         private void InstantiateNext()
         {
-            _next = Instantiate(LevelGameObject.gameObject).GetComponent<Level>(); ;
+            _next = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
             _next.OnReduce += Reduce;
             Reduce();
         }
 
         private void Reduce()
         {
+            OnReduce?.Invoke();
             LifeTime--;
             if (LifeTime == 0)
             {
-                Destroy();
+                DestroyCircles();
+                Destroy(gameObject);
                 return;
             }
             foreach (var circle in _circles)
             {
                 circle.Reduce();
             }
-            OnNextLevelDone?.Invoke();
+            OnNextLevelReady?.Invoke(this);
         }
 
-        private void Destroy()
+        private void DestroyCircles()
         {
             foreach (var circle in _circles)
             {
