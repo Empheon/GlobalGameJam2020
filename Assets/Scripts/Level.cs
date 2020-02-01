@@ -16,6 +16,7 @@ namespace Assets.Scripts
         public float Radius;
 
         public Level LevelGameObject;
+        public Circle CircleGameObject;
 
         private Level _next;
         private List<Circle> _circles = new List<Circle>();
@@ -24,6 +25,7 @@ namespace Assets.Scripts
         {
             name = "Level-" + levelNumber;
             InstantiateNext();
+            CreateCircles();
         }
 
         public void InstantiateNext()
@@ -31,42 +33,49 @@ namespace Assets.Scripts
             _next = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
             levelNumber++;
             _next.name = "Level-" + levelNumber;
+            // todo: multiple Circles is possible here
+            _next.CreateCircles();
             _next.OnReduce += Reduce;
             Reduce();
+        }
+
+        private void CreateCircles()
+        {
+            var circle = Instantiate(CircleGameObject.gameObject, transform).GetComponent<Circle>();
+            _circles.Add(circle);
         }
 
         private void Reduce()
         {
             LifeTime--;
-            if (LifeTime == 0)
-            {
-                DestroyCircles();
-                Destroy(gameObject);
-                return;
-            }
+            OnReduce?.Invoke();
             foreach (var circle in _circles)
             {
+                circle.OnReduceFinished += ReduceFinished;
                 circle.Reduce();
             }
-            OnNextLevelReady?.Invoke(_next);
-            OnReduce?.Invoke();
+            if (_circles.Count == 0)
+                OnNextLevelReady?.Invoke(_next);
         }
 
-        private void DestroyCircles()
+        private void ReduceFinished(Circle circle)
         {
-            foreach (var circle in _circles)
+            circle.OnReduceFinished -= ReduceFinished;
+            foreach (var c in _circles)
             {
-                circle.OnDestroyFinished += RemoveCircle;
+                if (c.OnReduceFinishedEventCountInvocation != null && c.OnReduceFinishedEventCountInvocation >= 1)
+                    return;
             }
+            RemoveCircle(circle);
+            OnNextLevelReady?.Invoke(_next);
         }
 
         private void RemoveCircle(Circle circle)
         {
-            _circles.Remove(circle);
-            if (_circles.Count == 0)
-            {
-                Destroy(gameObject);
-            }
+            if (LifeTime > 0)
+                return;
+            _next.OnReduce -= Reduce;
+            Destroy(gameObject);
         }
 
     }

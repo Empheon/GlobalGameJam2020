@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.Interfaces;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class CircleComponent : MonoBehaviour
+    public class CircleComponent : MonoBehaviour, ICircleComponent
     {
+
+        public event CircleComponentReduceFinishedeHandler OnReduceFinished;
 
         private const float _small = 0.000001f;
 
@@ -24,9 +27,11 @@ namespace Assets.Scripts
         private float[] _toConstructDegrees;
         private int _stepsNumber;
         public int StepsIndex = 0;
+        public int? OnReduceFinishedEventCountInvocation => OnReduceFinished?.GetInvocationList().Length;
 
         public void Init(List<float> lineWidth, List<float> radius, Color color, Material circleMat, bool isToConstruct, float animationDuration, float[] toConstructDegrees)
         {
+            
             _lineWidth = lineWidth;
             _radius = radius;
             _color = color;
@@ -60,10 +65,7 @@ namespace Assets.Scripts
 
                     _reduce = false;
                     _reduceCounter = 0;
-                    if (_lineWidth.Count == 0 && _radius.Count == 0)
-                    {
-                        // trigger destroy level
-                    }
+                    OnReduceFinished?.Invoke(this);
                 }
                 else
                 {

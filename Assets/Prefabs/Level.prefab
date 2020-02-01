@@ -46,3 +46,5 @@ MonoBehaviour:
   LifeTime: 3
   Radius: 0
   LevelGameObject: {fileID: 4613485126764751786}
+  CircleGameObject: {fileID: 4016846676670669503, guid: 8ae029fa2e89e4740a2d2c9f0d89c299,
+    type: 3}

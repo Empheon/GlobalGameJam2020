@@ -2,16 +2,14 @@
 namespace Assets.Scripts.Interfaces
 {
 
-    public delegate void DestroyHandler(Circle circle);
+    public delegate void CircleReduceFinishedeHandler(Circle circle);
 
     public interface ICircle
     {
 
-        event DestroyHandler OnDestroyFinished;
+        event CircleReduceFinishedeHandler OnReduceFinished;
 
         void Reduce();
-
-        void Destroy();
 
     }
 }

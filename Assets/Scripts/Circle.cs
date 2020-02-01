@@ -7,7 +7,7 @@ namespace Assets.Scripts
     public class Circle : MonoBehaviour, ICircle
     {
 
-        public event DestroyHandler OnDestroyFinished;
+        public event CircleReduceFinishedeHandler OnReduceFinished;
 
         public Material CircleMat;
         public Material ToConstructMat;
@@ -25,8 +25,9 @@ namespace Assets.Scripts
 
         private GameObject _destructionCircleInConstruction;
         private bool _destroying;
+        public int? OnReduceFinishedEventCountInvocation => OnReduceFinished?.GetInvocationList().Length;
 
-        public Circle(List<float> lineWidth, List<float> radius, Color color, List<float[]> toConstructDegrees)
+        public void Init(List<float> lineWidth, List<float> radius, Color color, List<float[]> toConstructDegrees)
         {
             _lineWidth = lineWidth;
             _radius = radius;
@@ -82,8 +83,22 @@ namespace Assets.Scripts
             _circleBase.GetComponent<CircleComponent>().Reduce();
             foreach (var circle in _circlesToConstruct)
             {
-                circle.GetComponent<CircleComponent>().Reduce();
+                var circleComponent = circle.GetComponent<CircleComponent>();
+                circleComponent.OnReduceFinished += ReduceFinished;
+                circleComponent.Reduce();
             }
+        }
+
+        private void ReduceFinished(CircleComponent circleComponent)
+        {
+            circleComponent.OnReduceFinished -= ReduceFinished;
+            foreach (var circle in _circlesToConstruct)
+            {
+                var cc = circle.GetComponent<CircleComponent>();
+                if (cc.OnReduceFinishedEventCountInvocation != null && cc.OnReduceFinishedEventCountInvocation >= 1)
+                    return;
+            }
+            OnReduceFinished?.Invoke(this);
         }
 
         public void UpdatePress(float degree)
@@ -147,12 +162,6 @@ namespace Assets.Scripts
                 }
 
             }
-        }
-
-        public void Destroy()
-        {
-            OnDestroyFinished?.Invoke(this);
-            // todo: destroy the circle
         }
 
     }
