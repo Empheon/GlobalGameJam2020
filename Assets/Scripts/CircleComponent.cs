@@ -21,7 +21,7 @@ public class CircleComponent : MonoBehaviour
     private bool _isToConstruct;
     private float[] _toConstructDegrees;
     private int _stepsNumber;
-    private int _stepsIndex = 0;
+    public int StepsIndex = 0;
 
     public void Init(List<float> lineWidth, List<float> radius, Color color, Material circleMat, bool isToConstruct, float animationDuration, float[] toConstructDegrees)
     {
@@ -52,6 +52,10 @@ public class CircleComponent : MonoBehaviour
             // if done reducing
             if (_reduceCounter >= 1)
             {
+                var newWidth = StepsIndex < _stepsNumber ? _lineWidth[StepsIndex] : _small;
+                var newRadius = StepsIndex < _stepsNumber ? _radius[StepsIndex] : _small;
+                DrawCircle(newRadius, newWidth);
+
                 _reduce = false;
                 _reduceCounter = 0;
                 if (_lineWidth.Count == 0 && _radius.Count == 0)
@@ -61,8 +65,8 @@ public class CircleComponent : MonoBehaviour
             } else
             {
                 // reducing
-                var newWidth = Mathf.Lerp(_currentWidth, _stepsIndex < _stepsNumber ? _lineWidth[_stepsIndex] : _small, _reduceCounter);
-                var newRadius = Mathf.Lerp(_currentRadius, _stepsIndex < _stepsNumber ? _radius[_stepsIndex] : _small, _reduceCounter);
+                var newWidth = Mathf.Lerp(_currentWidth, StepsIndex < _stepsNumber ? _lineWidth[StepsIndex] : _small, _reduceCounter);
+                var newRadius = Mathf.Lerp(_currentRadius, StepsIndex < _stepsNumber ? _radius[StepsIndex] : _small, _reduceCounter);
                 DrawCircle(newRadius, newWidth);
             }
         }
@@ -71,9 +75,9 @@ public class CircleComponent : MonoBehaviour
     public void Reduce()
     {
         _reduce = true;
-        _currentRadius = _radius[_stepsIndex];
-        _currentWidth = _lineWidth[_stepsIndex];
-        _stepsIndex++;
+        _currentRadius = _radius[StepsIndex];
+        _currentWidth = _lineWidth[StepsIndex];
+        StepsIndex++;
     }
 
     private void DrawCircle(float radius, float lineWidth)
@@ -131,6 +135,6 @@ public class CircleComponent : MonoBehaviour
 
     public void RedrawCircle()
     {
-        DrawCircle(_radius[_stepsIndex], _lineWidth[_stepsIndex]);
+        DrawCircle(_radius[StepsIndex], _lineWidth[StepsIndex]);
     }
 }

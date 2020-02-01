@@ -16,6 +16,10 @@ public class Circle : MonoBehaviour
 
     private GameObject _circleBase;
     private List<GameObject> _circlesToConstruct;
+    private List<GameObject> _destructedCircles;
+
+    private GameObject _destructionCircleInConstruction;
+    private bool _destroying;
 
     public Circle(List<float> lineWidth, List<float> radius, Color color, List<float[]> toConstructDegrees)
     {
@@ -43,6 +47,7 @@ public class Circle : MonoBehaviour
         //////////////// above is temporary stuff
 
         _circlesToConstruct = new List<GameObject>();
+        _destructedCircles = new List<GameObject>();
         _circleBase = new GameObject("Circle base");
         _circleBase.transform.parent = transform;
 
@@ -78,9 +83,8 @@ public class Circle : MonoBehaviour
 
     public void UpdatePress(float degree)
     {
-        // destroy (add black circle gameobjects) on normal angles
-
-
+        var shouldDestroy = true;
+        bool lastPress = false;
         // redraw the to construct circles with the updated angles
         for (var i = 0; i < _circlesToConstruct.Count; i++)
         {
@@ -89,10 +93,53 @@ public class Circle : MonoBehaviour
             if (degree > degs[0] && degree < degs[1])
             {
                 // we tap in a to construct circle
+                var prevDegree = degs[0];
                 circle.UpdateDegreeIn(degree);
                 circle.RedrawCircle();
+                shouldDestroy = false;
+
+                // if we were destroying just before, we need to stop
+                if (_destroying)
+                {
+                    circle = _destructionCircleInConstruction.GetComponent<CircleComponent>();
+                    circle.UpdateDegreeOut(prevDegree);
+                    circle.RedrawCircle();
+                    _destroying = false;
+                    _destructedCircles.Add(_destructionCircleInConstruction);
+                }
+
                 break;
             }
+        }
+
+
+        // if it doesnt construct, it destroys on normal angles
+        // we need to create a new circle
+        if (shouldDestroy)
+        {
+            // we update the circle in destruction if we're already destroying it
+            if (_destroying)
+            {
+                var circle = _destructionCircleInConstruction.GetComponent<CircleComponent>();
+                circle.UpdateDegreeOut(degree);
+                circle.RedrawCircle();
+                if (lastPress)
+                {
+                    _destroying = false;
+                    _destructedCircles.Add(_destructionCircleInConstruction);
+                }
+            } else
+            {
+                // else we create a destruction circle
+                _destroying = true;
+                _destructionCircleInConstruction = new GameObject("Circle to construct");
+                _destructionCircleInConstruction.transform.parent = transform;
+                _destructionCircleInConstruction.transform.position = new Vector3(0, 0, -5);
+                var tcCC = _destructionCircleInConstruction.AddComponent<CircleComponent>();
+                tcCC.Init(_lineWidth, _radius, _color, ToConstructMat, true, AnimationDuration, new float[] { degree, degree });
+                tcCC.StepsIndex = _circleBase.GetComponent<CircleComponent>().StepsIndex;
+            }
+
         }
     }
 }
