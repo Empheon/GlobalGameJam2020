@@ -57,14 +57,14 @@ namespace Assets.Scripts
             radius.Add(1.6f);
             radius.Add(0.7f);
 
-            _circles.Add(circle.Init(lineWidth, radius), circle);
+            _circles.Add(circle.Init(lineWidth, radius, Mathf.Min(levelNumber / 4 + 1, 4)), circle);
         }
 
         public void Press(Color color, float angle, bool lastPress)
         {
             if (_circles.ContainsKey(color))
             {
-                _circles[color].UpdatePress(360-angle, lastPress);
+                _circles[color].UpdatePress(360 - angle, lastPress);
             }
         }
 
@@ -77,7 +77,7 @@ namespace Assets.Scripts
             lineWidth.Add(0.8f);
             radius.Add(1.6f);
             radius.Add(0.7f);
-            _circles.Add(circle.Init(lineWidth, radius), circle);
+            _circles.Add(circle.Init(lineWidth, radius, 1), circle);
         }
 
         private void Reduce()

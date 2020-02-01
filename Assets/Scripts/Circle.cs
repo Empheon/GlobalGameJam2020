@@ -29,17 +29,58 @@ namespace Assets.Scripts
         private bool _creating;
         private float _creationEndDegree;
 
+        private const float MIN_START_RADIUS = 50f;
+
         public int? OnReduceFinishedEventCountInvocation => OnReduceFinished?.GetInvocationList().Length;
 
-        public Color Init(List<float> lineWidth, List<float> radius)
+        public Color Init(List<float> lineWidth, List<float> radius, int difficultness)
         {
             _lineWidth = lineWidth;
             _radius = radius;
             _color = GameManager.Colors[Random.Range(0, GameManager.Colors.Length)];
 
             _toConstructDegrees = new List<float[]>();
-            _toConstructDegrees.Add(new float[] { 20, 50 });
-            _toConstructDegrees.Add(new float[] { 120, 200 });
+
+            var minrad = (80 / difficultness);
+            var maxrad = (150 / difficultness);
+            for (var i = 0; i < difficultness; i++)
+            {
+                var cond = true;
+                while (cond)
+                {
+                    float angle1 = Random.Range(MIN_START_RADIUS, 359 - minrad - maxrad);
+                    float angle2 = Random.Range(angle1 + minrad, angle1 + maxrad);
+                    if (_toConstructDegrees.Count == 0)
+                    {
+                        _toConstructDegrees.Add(new float[] { angle1, angle2 });
+                        break;
+                    }
+                    var createAngle = true;
+                    foreach (var ang in _toConstructDegrees)
+                    {
+                        if (!(Mathf.Abs(angle1 - ang[0]) > minrad && Mathf.Abs(angle2 - ang[1]) > minrad &&
+                            Mathf.Abs(angle2 - ang[0]) > minrad && Mathf.Abs(angle1 - ang[1]) > minrad &&
+                            !(angle1 > ang[0] && angle1 < ang[1]) &&
+                            !(angle2 > ang[0] && angle2 < ang[1]) &&
+                            !(ang[0] > angle1 && ang[0] < angle2) &&
+                            !(ang[1] > angle1 && ang[1] < angle2)))
+                        {
+                            createAngle = false;
+                            break;
+                        }
+                    }
+                    if (createAngle)
+                    {
+                        _toConstructDegrees.Add(new float[] { Mathf.Floor(angle1), Mathf.Floor(angle2) });
+                        cond = false;
+                    }
+                }
+            }
+            //_toConstructDegrees.Clear();
+            //_toConstructDegrees.Add(new float[] { 20, 50 });
+            //_toConstructDegrees.Add(new float[] { 120, 200 });
+            //_toConstructDegrees.Add(new float[] { 60, 80 });
+            //_toConstructDegrees.Add(new float[] { 220, 310 });
             //////////////// above is temporary stuff
 
             _circlesToConstruct = new List<GameObject>();

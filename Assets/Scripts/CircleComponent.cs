@@ -79,6 +79,10 @@ namespace Assets.Scripts
 
         public void Reduce()
         {
+            if (StepsIndex == _stepsNumber)
+            {
+                return;
+            }
             _reduce = true;
             _currentRadius = _radius[StepsIndex];
             _currentWidth = _lineWidth[StepsIndex];
