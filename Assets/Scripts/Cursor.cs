@@ -26,12 +26,13 @@ namespace Assets.Scripts
         /// Rotation speed of the cursor
         /// </summary>
         public float RotationSpeed = 30f;
+        private bool _secondHalf = false;
 
         /// <summary>
         /// Angle of the cursor in degree
         /// </summary>
         //public float CurrenAngleInDegree => transform.rotation.eulerAngles.z
-        public float CurrenAngleInDegree => transform.localRotation.eulerAngles.z;
+        public float CurrenAngleInDegree => transform.rotation.eulerAngles.z;
 
         private void Start()
         {
@@ -42,7 +43,6 @@ namespace Assets.Scripts
         {
             if (CursorState == CursorState.ACTIVE)
             {
-                //transform.Rotate(new Vector3(0, 0, RotationSpeed) * Time.deltaTime);
                 transform.Rotate(Vector3.forward * RotationSpeed * Time.deltaTime);
                 if (TurnDone(CurrenAngleInDegree, OneTurnDegree))
                     NewTurn();
@@ -51,7 +51,12 @@ namespace Assets.Scripts
 
         private bool TurnDone(float currentAngle, float oneTurnDegree)
         {
-            return currentAngle >= oneTurnDegree;
+            var _lastSecondHalfValue = _secondHalf;
+            if (currentAngle >= 180)
+                _secondHalf = true;
+            else
+                _secondHalf = false;
+            return _lastSecondHalfValue == true && _secondHalf == false;
         }
 
         private void NewTurn()
