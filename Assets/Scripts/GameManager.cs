@@ -41,10 +41,8 @@ namespace Assets.Scripts
 
             for (var i = 0; i < Colors.Length; i++)
             {
-                Debug.Log(i);
                 Buttons[i].gameObject.GetComponent<Image>().color = Colors[i];
                 var color = Colors[i];
-                //Buttons[i] .onClick.AddListener(delegate { Touch(color, false); });
             }
         }
 

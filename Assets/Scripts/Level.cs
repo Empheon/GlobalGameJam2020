@@ -50,12 +50,12 @@ namespace Assets.Scripts
             circle.name = "Circle-" + name;
             var lineWidth = new List<float>();
             var radius = new List<float>();
-            lineWidth.Add(0.75f);
-            lineWidth.Add(0.5f);
-            lineWidth.Add(0.25f);
-            radius.Add(3f);
-            radius.Add(1.5f);
-            radius.Add(0.75f);
+            lineWidth.Add(0.8f);
+            lineWidth.Add(0.65f);
+            lineWidth.Add(0.8f);
+            radius.Add(2.5f);
+            radius.Add(1.6f);
+            radius.Add(0.7f);
 
             _circles.Add(circle.Init(lineWidth, radius), circle);
         }
@@ -73,10 +73,10 @@ namespace Assets.Scripts
             var circle = Instantiate(CircleGameObject.gameObject).GetComponent<Circle>();
             var lineWidth = new List<float>();
             var radius = new List<float>();
-            lineWidth.Add(0.5f);
-            lineWidth.Add(0.25f);
-            radius.Add(1.5f);
-            radius.Add(0.75f);
+            lineWidth.Add(0.65f);
+            lineWidth.Add(0.8f);
+            radius.Add(1.6f);
+            radius.Add(0.7f);
             _circles.Add(circle.Init(lineWidth, radius), circle);
         }
 

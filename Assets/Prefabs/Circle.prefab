@@ -45,4 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CircleMat: {fileID: 2100000, guid: c0ae63a3f9ea8ff46adbcbb122101f90, type: 2}
   ToConstructMat: {fileID: 2100000, guid: d86eb16942a7637459ad4d4a1818898c, type: 2}
-  AnimationDuration: 0.5
+  AnimationDuration: 0.25
