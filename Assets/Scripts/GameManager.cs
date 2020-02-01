@@ -10,6 +10,8 @@ namespace Assets.Scripts
     {
         public static Color[] Colors = new Color[] { new Color(1, 0.65f, 0), Color.cyan };
         public List<Button> Buttons;
+        public Slider Gauge;
+        public Text ScoreText;
 
         [Header("Manager")]
         public static GameManager Instance;
@@ -19,6 +21,7 @@ namespace Assets.Scripts
 
         private Level _currentLevel;
         private Cursor _cursor;
+        private ScoreManager _scoreManager;
 
         private void Awake()
         {
@@ -39,9 +42,10 @@ namespace Assets.Scripts
             _currentLevel.Init();
             _cursor.OnNewTurn += NextLevel;
 
+            _scoreManager = new ScoreManager(Gauge, ScoreText);
+
             for (var i = 0; i < Colors.Length; i++)
             {
-                Debug.Log(i);
                 Buttons[i].gameObject.GetComponent<Image>().color = Colors[i];
                 var color = Colors[i];
                 //Buttons[i] .onClick.AddListener(delegate { Touch(color, false); });
@@ -50,6 +54,7 @@ namespace Assets.Scripts
 
         private void NextLevel()
         {
+            _scoreManager.AddPoint();
             _currentLevel.OnNextLevelReady -= NextLevelReady;
             _currentLevel = _currentLevel.Next;
             _currentLevel.OnNextLevelReady += NextLevelReady;
