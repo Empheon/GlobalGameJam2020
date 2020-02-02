@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using System;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
@@ -9,7 +10,7 @@ namespace Assets.Scripts
     {
 
         public event GameOverHandler OnGameOver;
-        public int CurrentScore;
+        public float CurrentScore;
         public float GaugePercent;
         private Slider _gaugeSlider;
         private Text _scoreText;
@@ -25,10 +26,10 @@ namespace Assets.Scripts
             _scoreText.text = CurrentScore.ToString();
         }
 
-        public void AddPoint()
+        public void AddPoint(float points)
         {
-            CurrentScore++;
-            _scoreText.text = CurrentScore.ToString();
+            CurrentScore += points;
+            _scoreText.text = Math.Ceiling(CurrentScore).ToString();
         }
 
         public void BuiltAngle(float angle) => SetGaugeScore(angle);
@@ -36,10 +37,12 @@ namespace Assets.Scripts
 
         private void SetGaugeScore(float angle, bool negative = false)
         {
-            var gaugeScore = angle / 360f;
+            var gaugeScore = angle / 180f;
             if (negative)
-                gaugeScore *= -1;
-            GaugePercent += gaugeScore;
+                gaugeScore *= -2;
+            else
+                AddPoint(angle);
+            GaugePercent = Math.Min(GaugePercent + gaugeScore, 1);
             _gaugeSlider.value = GaugePercent;
             if (_isGameOver)
                 GameOver();

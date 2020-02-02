@@ -23,7 +23,7 @@ namespace Assets.Scripts
 
         private Level _currentLevel;
         private Cursor _cursor;
-        private ScoreManager _scoreManager;
+        public ScoreManager ScoreManager;
 
         private void Awake()
         {
@@ -44,8 +44,8 @@ namespace Assets.Scripts
             _currentLevel.Init();
             _cursor.OnNewTurn += NextLevel;
 
-            _scoreManager = new ScoreManager(Gauge, ScoreText);
-            _scoreManager.OnGameOver += GameOver;
+            ScoreManager = new ScoreManager(Gauge, ScoreText);
+            ScoreManager.OnGameOver += GameOver;
 
             for (var i = 0; i < Colors.Length; i++)
             {
@@ -63,7 +63,7 @@ namespace Assets.Scripts
 
         private void NextLevel()
         {
-            _scoreManager.AddPoint();
+            ScoreManager.AddPoint(Level.levelNumber * 10);
             _currentLevel.OnNextLevelReady -= NextLevelReady;
             _currentLevel = _currentLevel.Next;
             _currentLevel.OnNextLevelReady += NextLevelReady;

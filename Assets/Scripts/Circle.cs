@@ -161,6 +161,7 @@ namespace Assets.Scripts
             {
                 shouldDestroy = false;
                 var circle = _creationCircleInConstruction.GetComponent<CircleComponent>();
+                GameManager.Instance.ScoreManager.BuiltAngle(degree - circle.GetDegrees()[0]);
                 circle.UpdateDegreeIn(degree);
                 circle.RedrawCircle();
                 if (lastPress || degree > _creationEndDegree)
@@ -185,6 +186,7 @@ namespace Assets.Scripts
                         // if the diff is so small we should'nt create 2 separate circles
                         if (Mathf.Abs(degree - degs[0]) < 0.5)
                         {
+                            GameManager.Instance.ScoreManager.BuiltAngle(degree - circle.GetDegrees()[0]);
                             circle.UpdateDegreeIn(degree);
                         } else
                         {
@@ -209,6 +211,7 @@ namespace Assets.Scripts
                         if (_destroying)
                         {
                             circle = _destructionCircleInConstruction.GetComponent<CircleComponent>();
+                            GameManager.Instance.ScoreManager.DestroyedAngle(degree - circle.GetDegrees()[1]);
                             circle.UpdateDegreeOut(degree);
                             circle.RedrawCircle();
                             _destroying = false;
@@ -229,6 +232,7 @@ namespace Assets.Scripts
                 if (_destroying)
                 {
                     var circle = _destructionCircleInConstruction.GetComponent<CircleComponent>();
+                    GameManager.Instance.ScoreManager.DestroyedAngle(degree - circle.GetDegrees()[1]);
                     circle.UpdateDegreeOut(degree);
                     circle.RedrawCircle();
                     if (lastPress)
@@ -248,6 +252,12 @@ namespace Assets.Scripts
                     tcCC.Init(_lineWidth, _radius, _color, ToConstructMat, true, AnimationDuration, new float[] { degree, degree });
                 }
 
+            }
+
+            if (lastPress)
+            {
+                _creating = false;
+                _destroying = false;
             }
         }
 
