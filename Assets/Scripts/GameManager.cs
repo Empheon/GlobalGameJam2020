@@ -53,6 +53,7 @@ namespace Assets.Scripts
                 Buttons[i].gameObject.GetComponent<Image>().color = Colors[i];
                 var color = Colors[i];
             }
+            Time.timeScale = 1f;
         }
 
         private void GameOver()
@@ -84,11 +85,19 @@ namespace Assets.Scripts
         public void Restart()
         {
             SceneManager.LoadScene("Scenes/Main", LoadSceneMode.Single);
+            Destroy();
         }
 
         public void Quit()
         {
             SceneManager.LoadScene("Scenes/HomeScreen", LoadSceneMode.Single);
+            Destroy();
+        }
+
+        private void Destroy()
+        {
+            Level.levelNumber = 0;
+            Destroy(gameObject);
         }
 
     }
