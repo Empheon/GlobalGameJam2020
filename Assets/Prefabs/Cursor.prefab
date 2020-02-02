@@ -43,10 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e46eef83da6fe4595e297ccdc80edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Length: 2
-  PositionOffset: 1
+  Length: 0.64
+  PositionOffset: 1.28
   Thickness: 0.1
-  Color: {r: 1, g: 1, b: 1, a: 1}
+  Color: {r: 1, g: 0.5176471, b: 0.98039216, a: 1}
   Material: {fileID: 2100000, guid: c0ae63a3f9ea8ff46adbcbb122101f90, type: 2}
   CursorState: 1
   Direction: {x: 0, y: 0, z: -1}

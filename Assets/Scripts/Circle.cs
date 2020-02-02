@@ -28,6 +28,7 @@ namespace Assets.Scripts
         private bool _destroying;
         private bool _creating;
         private float _creationEndDegree;
+        private bool _isPressing = false;
 
         private const float MIN_START_RADIUS = 50f;
 
@@ -106,11 +107,6 @@ namespace Assets.Scripts
             return _color;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-        }
-
         public void Reduce()
         {
             _circleBase.GetComponent<CircleComponent>().Reduce();
@@ -156,6 +152,7 @@ namespace Assets.Scripts
 
         public void UpdatePress(float degree, bool lastPress)
         {
+            _isPressing = true;
             var shouldDestroy = true;
             if (_creating)
             {
@@ -258,8 +255,26 @@ namespace Assets.Scripts
             {
                 _creating = false;
                 _destroying = false;
+                _isPressing = false;
             }
         }
 
+        public void CheckShouldTap(float angle1, float angle2)
+        {
+            if (_isPressing)
+            {
+                return;
+            }
+            foreach (var circle in _circlesToConstruct)
+            {
+                var c = circle.GetComponent<CircleComponent>();
+                var deg = c.GetDegrees();
+                if (angle1 > deg[0] && angle1 < deg[1] && angle2 > deg[0] && angle2 < deg[1])
+                {
+                    GameManager.Instance.ScoreManager.DestroyedAngle(Mathf.Abs(angle2 - angle1) / 3f);
+                    break;
+                }
+            }
+        }
     }
 }

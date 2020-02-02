@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Interfaces;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -61,6 +62,7 @@ namespace Assets.Scripts
             radius.Add(0.7f);
 
             _circles.Add(circle.Init(lineWidth, radius, Mathf.Min(levelNumber / 4 + 1, 4)), circle);
+            GameManager.Instance.Cursor.RotationSpeed = 100 + Mathf.Min(levelNumber / 4 + 1, 4) * 20f;
         }
 
         public void Press(Color color, float angle, bool lastPress)
@@ -106,6 +108,14 @@ namespace Assets.Scripts
             }
             DestroyLevel();
             OnNextLevelReady?.Invoke();
+        }
+
+        internal void CheckHoverCircles(float angle1, float angle2)
+        {
+            foreach(var c in _circles.Values)
+            {
+                c.CheckShouldTap(angle1, angle2);
+            }
         }
 
         private void DestroyLevel()

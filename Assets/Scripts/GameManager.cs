@@ -23,7 +23,7 @@ namespace Assets.Scripts
         public Level LevelGameObject;
 
         private Level _currentLevel;
-        private Cursor _cursor;
+        public Cursor Cursor;
         public ScoreManager ScoreManager;
 
         private void Awake()
@@ -39,11 +39,11 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            _cursor = Instantiate(CursorGameObject.gameObject).GetComponent<Cursor>();
+            Cursor = Instantiate(CursorGameObject.gameObject).GetComponent<Cursor>();
             _currentLevel = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
             _currentLevel.OnNextLevelReady += NextLevelReady;
             _currentLevel.Init();
-            _cursor.OnNewTurn += NextLevel;
+            Cursor.OnNewTurn += NextLevel;
 
             ScoreManager = new ScoreManager(Gauge, ScoreText);
             ScoreManager.OnGameOver += GameOver;
@@ -74,12 +74,12 @@ namespace Assets.Scripts
 
         private void NextLevelReady()
         {
-            _cursor.CursorState = CursorState.ACTIVE;
+            Cursor.CursorState = CursorState.ACTIVE;
         }
 
         public void Touch(Color color, bool lastPress)
         {
-            _currentLevel.Press(color, _cursor.CurrenAngleInDegree, lastPress);
+            _currentLevel.Press(color, Cursor.CurrentAngleInDegree, lastPress);
         }
 
         public void Restart()
@@ -100,5 +100,9 @@ namespace Assets.Scripts
             Destroy(gameObject);
         }
 
+        private void Update()
+        {
+            _currentLevel.CheckHoverCircles(360 - Cursor.PrevAngleInDegree, 360 - Cursor.CurrentAngleInDegree);
+        }
     }
 }

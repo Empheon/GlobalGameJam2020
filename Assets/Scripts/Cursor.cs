@@ -43,7 +43,8 @@ namespace Assets.Scripts
         /// <summary>
         /// Angle of the cursor in degree
         /// </summary>
-        public float CurrenAngleInDegree => transform.rotation.eulerAngles.z;
+        public float CurrentAngleInDegree => transform.rotation.eulerAngles.z;
+        public float PrevAngleInDegree;
 
         private void Start()
         {
@@ -70,8 +71,9 @@ namespace Assets.Scripts
         {
             if (CursorState == CursorState.ACTIVE)
             {
+                PrevAngleInDegree = CurrentAngleInDegree;
                 transform.Rotate(Direction * RotationSpeed * Time.deltaTime);
-                if (TurnDone(CurrenAngleInDegree))
+                if (TurnDone(CurrentAngleInDegree))
                     NewTurn();
             }
         }
