@@ -15,6 +15,7 @@ namespace Assets.Scripts
         public Slider Gauge;
         public Text ScoreText;
         public GameObject GameOverObject;
+        public Text StartCounterText;
 
         [Header("Manager")]
         public static GameManager Instance;
@@ -39,6 +40,12 @@ namespace Assets.Scripts
 
         private void Start()
         {
+            Time.timeScale = 1f;
+            StartCoroutine(StartDelayCoroutine());
+        }
+
+        public void StartGame()
+        {
             _cursor = Instantiate(CursorGameObject.gameObject).GetComponent<Cursor>();
             _currentLevel = Instantiate(LevelGameObject.gameObject).GetComponent<Level>();
             _currentLevel.OnNextLevelReady += NextLevelReady;
@@ -53,7 +60,20 @@ namespace Assets.Scripts
                 Buttons[i].gameObject.GetComponent<Image>().color = Colors[i];
                 var color = Colors[i];
             }
-            Time.timeScale = 1f;
+        }
+
+        IEnumerator StartDelayCoroutine()
+        {
+            var waitTime = .5f;
+            StartCounterText.gameObject.SetActive(true);
+            StartCounterText.text = "3";
+            yield return new WaitForSeconds(waitTime);
+            StartCounterText.text = "2";
+            yield return new WaitForSeconds(waitTime);
+            StartCounterText.text = "1";
+            yield return new WaitForSeconds(waitTime);
+            StartCounterText.gameObject.SetActive(false);
+            StartGame();
         }
 
         private void GameOver()
