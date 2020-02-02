@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Enums;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts
@@ -78,6 +79,16 @@ namespace Assets.Scripts
         public void Touch(Color color, bool lastPress)
         {
             _currentLevel.Press(color, _cursor.CurrenAngleInDegree, lastPress);
+        }
+
+        public void Restart()
+        {
+            SceneManager.LoadScene("Scenes/Main", LoadSceneMode.Single);
+        }
+
+        public void Quit()
+        {
+            SceneManager.LoadScene("Scenes/HomeScreen", LoadSceneMode.Single);
         }
 
     }
