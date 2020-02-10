@@ -271,7 +271,7 @@ namespace Assets.Scripts
                 var deg = c.GetDegrees();
                 if (angle1 > deg[0] && angle1 < deg[1] && angle2 > deg[0] && angle2 < deg[1])
                 {
-                    GameManager.Instance.ScoreManager.DestroyedAngle(Mathf.Abs(angle2 - angle1) / 3f);
+                    GameManager.Instance.ScoreManager.DestroyedAngle(Mathf.Abs(angle2 - angle1) / 10f);
                     break;
                 }
             }
